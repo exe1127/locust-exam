@@ -24,11 +24,30 @@ json_data = {
 
 # response = requests.post('https://btntbw73c9.execute-api.us-east-1.amazonaws.com/Prod/addfan', headers=headers, json=json_data)
 
-params = {
-    "userId": "qa-1",
-    "starId": "qa-1"
+# params = {
+#     "userId": "qa-1",
+#     "starId": "qa-1"
+# }
+
+headers2 = {
+    'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
+    'accept': 'application/json, text/plain, */*',
+    'accept-language': 'es-419,es;q=0.9',
+    'origin': 'http://localhost:3000',
+    'referer': 'http://localhost:3000/',
+    'sec-ch-ua': '"Google Chrome";v="105", "Not)A;Brand";v="8", "Chromium";v="105"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'cross-site',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
 }
 
+params = {
+    'starId': '1',
+    'userId': '1',
+}
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/Prod"
@@ -36,7 +55,7 @@ class Request(HttpUser):
 
     @task
     def position(self):
-        self.client.get("/queueposition?", headers=headers, params=params)
+        self.client.get("/queueposition?",  params=params, headers=headers2)
 
     @task
     def addfan(self):
