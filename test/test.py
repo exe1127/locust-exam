@@ -1,5 +1,4 @@
 from locust import HttpUser, task, between, constant
-# import requests
 
 headers = {
     'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
@@ -35,25 +34,25 @@ class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/Prod"
     wait_time = between(1, 5)
 
-    # @task
-    # def position(self):
-    #     self.client.get("/queueposition?", params=params)
+    @task
+    def position(self):
+        self.client.get("/queueposition?", headers=headers, params=params)
 
     @task
     def addfan(self):
         self.client.post('/addfan', headers=headers, json=json_data)
 
-    # @task
-    # def processqueue(self):
-    #     self.client.post("/processqueue", headers=headers, json=json_data)
+    @task
+    def processqueue(self):
+        self.client.post("/processqueue", headers=headers, json=json_data)
 
-    # @task
-    # def clearqueue(self):
-    #     self.client.post("/clearqueue", headers=headers, json=json_data)
+    @task
+    def clearqueue(self):
+        self.client.post("/clearqueue", headers=headers, json=json_data)
 
-    # @task
-    # def enableQueue(self):
-    #     self.client.post("/enableQueue", headers=headers, json=json_data)
+    @task
+    def enableQueue(self):
+        self.client.post("/enableQueue", headers=headers, json=json_data)
 
     # @task
     # def createUser(self):
