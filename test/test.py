@@ -1,5 +1,5 @@
-from locust import HttpUser, SequentialTaskSet, task, between, constant
-import time
+from locust import HttpUser, SequentialTaskSet, task, between
+
 headers = {
     'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
     'accept': 'application/json, text/plain, */*',
@@ -47,6 +47,11 @@ params = {
     'starId': '1',
     'userId': '1',
 }
+
+class Queue(SequentialTaskSet):
+    @task
+    def processqueue(self):
+        self.client.post("/processqueue", headers=headers, json=json_data)
 class Initialized(SequentialTaskSet):
     @task
     def enable(self):
@@ -57,31 +62,25 @@ class Initialized(SequentialTaskSet):
     @task
     def position(self):
         self.client.get("/queueposition?",  params=json_data, headers=headers)
+
+    tasks = [Queue]
+
+
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
    
-    tasks = [Initialized]
+    tasks = [Initialized, Queue]
     wait_time = between(1, 5)
     
-    # @task
-    # def position(self):
-    #     self.client.get("/queueposition?",  params=params, headers=headers2)
+    
 
-    # @task
-    # def addfan(self):
-    #     self.client.post('/addfan', headers=headers, json=json_data)
-
-    # @task
-    # def processqueue(self):
-    #     self.client.post("/processqueue", headers=headers, json=json_data)
+   
 
     # @task
     # def clearqueue(self):
     #     self.client.post("/clearqueue", headers=headers, json=json_data)
 
-    # @task
-    # def enableQueue(self):
-    #     self.client.post("/enableQueue", headers=headers, json=json_data)
+   
 
     # @task
     # def createUser(self):
