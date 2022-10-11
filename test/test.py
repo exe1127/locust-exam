@@ -1,5 +1,5 @@
-from locust import HttpUser, task, between, constant
-
+from locust import HttpUser, SequentialTaskSet, task, between, constant
+import time
 headers = {
     'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
     'accept': 'application/json, text/plain, */*',
@@ -47,11 +47,22 @@ params = {
     'starId': '1',
     'userId': '1',
 }
-
+class Initialized(SequentialTaskSet):
+    @task
+    def enable(self):
+       self.client.post("/enableQueue", headers=headers, json=json_data)
+    @task
+    def addfan(self):
+        self.client.post('/addfan', headers=headers, json=json_data)
+    @task
+    def position(self):
+        self.client.get("/queueposition?",  params=json_data, headers=headers)
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
+   
+    tasks = [Initialized]
     wait_time = between(1, 5)
-
+    
     # @task
     # def position(self):
     #     self.client.get("/queueposition?",  params=params, headers=headers2)
