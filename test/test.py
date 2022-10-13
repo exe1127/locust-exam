@@ -45,6 +45,7 @@ params = {
     'starId': '1',
     'userId': '1',
 }
+
 # class Queue(SequentialTaskSet):
 #     @task
 #     def advance(self):
@@ -54,14 +55,16 @@ class Initialized(SequentialTaskSet):
 
     @task
     def enable(self):
-        self.client.post("/enableQueue", headers=headers, json={'starId': '3'})
+        for id in [1,2,3]:
+            self.client.post("/enableQueue", headers=headers, json={'starId': id})
 
     @task
     def addfan(self):
         for id in [1,2,3,4,5]:
-            self.client.post('/addfan', headers=headers, json={
-            'starId': '3',
-            'userId': id
+            for id2 in [1,2,3]:
+                self.client.post('/addfan', headers=headers, json={
+                'starId': id2,
+                'userId': id
         })
 
     # @task
