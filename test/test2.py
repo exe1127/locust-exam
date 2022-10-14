@@ -27,7 +27,8 @@ class Initialized(SequentialTaskSet):
     @task
     def enable(self):
         for id in [1, 2, 3]:
-            self.client.post("/enableQueue", headers=headers, json={'starId': id})
+            self.client.post("/enableQueue", headers=headers,
+                             json={'starId': id})
 
     @task
     def addfan(self):
@@ -40,7 +41,12 @@ class Initialized(SequentialTaskSet):
 
     @task
     def clearqueue(self):
-        self.client.post("/clearqueue", headers=headers, json={'starId': '1'})
+        for id in [1, 2, 3]:
+            self.client.post("/clearqueue", headers=headers,
+                             json={'starId': id})
+        
+        self.user.environment.runner.stop()
+       
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
@@ -48,3 +54,4 @@ class Request(HttpUser):
     tasks = [Initialized]
 
     wait_time = between(1, 5)
+    
