@@ -22,6 +22,15 @@ json_data = {
 }
 
 
+class Queue(SequentialTaskSet):
+    @task
+    def advance(self):
+        for id in range(1,4):
+            self.client.post("/processqueue", headers=headers,
+                             json={'starId': '3'})
+            self.user.environment.runner.stop()
+
+
 class Initialized(SequentialTaskSet):
 
     @task
@@ -39,19 +48,10 @@ class Initialized(SequentialTaskSet):
                     'userId': id
                 })
 
-    @task
-    def clearqueue(self):
-        for id in range(1,4):
-            self.client.post("/clearqueue", headers=headers,
-                             json={'starId': id})
-        
-        self.user.environment.runner.stop()
-       
+    tasks = [Queue]
+
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
     wait_time = between(1, 5)
     tasks = [Initialized]
-
-    
-    

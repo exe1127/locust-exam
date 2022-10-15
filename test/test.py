@@ -50,23 +50,25 @@ params = {
 #     @task
 #     def advance(self):
 #         self.client.post("/processqueue", headers=headers,json={'starId': '1'})
-                         
+
+
 class Initialized(SequentialTaskSet):
 
     @task
     def enable(self):
-        for id in [1,2,3]:
-            self.client.post("/enableQueue", headers=headers, json={'starId': id})
+        for id in [1, 2, 3]:
+            self.client.post("/enableQueue", headers=headers,
+                             json={'starId': id})
 
     @task
     def addfan(self):
-        for id in [1,2,3,4,5]:
-            for id2 in [1,2,3]:
+        for id in [1, 2, 3, 4, 5]:
+            for id2 in [1, 2, 3]:
                 self.client.post('/addfan', headers=headers, json={
                 'starId': id2,
                 'userId': id
         })
-
+        self.user.environment.runner.stop()
     # @task
     # def position(self):
     #     self.client.get("/queueposition?",  params=json_data, headers=headers)
@@ -76,10 +78,10 @@ class Initialized(SequentialTaskSet):
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
-
+    wait_time = between(1, 5)
     tasks = [Initialized]
 
-    wait_time = between(1, 5)
+   
 
     # @task
     # def clearqueue(self):
