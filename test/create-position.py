@@ -16,41 +16,33 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42',
 }
 
-json_data = {
-    'starId': '1',
-    'userId': '4',
-}
 
-
-class Queue(SequentialTaskSet):
-    @task
-    def advance(self):
-        for id in range(1,4):
-            self.client.post("/processqueue", headers=headers,
-                             json={'starId': '3'})
-            self.user.environment.runner.stop()
+class Position(SequentialTaskSet):
     @task
     def position(self):
-        self.client.get("/queueposition?",  params={'starId': '3'}, headers=headers)
+        for id in [1, 2, 3, 4, 5]:
+            self.client.get("/queueposition?",  params={'starId': '1',
+                                                        'userId': id, }, headers=headers)
+        self.user.environment.runner.stop()
+
 
 class Initialized(SequentialTaskSet):
 
     @task
     def enable(self):
-        for id in range(1,4):
+        for id in [1, 2, 3]:
             self.client.post("/enableQueue", headers=headers,
                              json={'starId': id})
 
     @task
     def addfan(self):
         for id in [1, 2, 3, 4, 5]:
-            for id2 in range(1,4):
+            for id2 in [1, 2, 3]:
                 self.client.post('/addfan', headers=headers, json={
                     'starId': id2,
                     'userId': id
                 })
-
-    tasks = [Queue]
+    tasks = [Position]
 
 
 class Request(HttpUser):
