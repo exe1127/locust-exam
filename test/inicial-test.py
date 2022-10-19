@@ -46,10 +46,6 @@ params = {
     'userId': '1',
 }
 
-# class Queue(SequentialTaskSet):
-#     @task
-#     def advance(self):
-#         self.client.post("/processqueue", headers=headers,json={'starId': '1'})
 
 
 class Initialized(SequentialTaskSet):
