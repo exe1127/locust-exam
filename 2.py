@@ -17,7 +17,7 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42',
 }
 
-value = [1, 2, 3, 4, 5]
+value = [1, 2, 3, 4, 5, 6]
 value2 = []
 
 
@@ -33,17 +33,18 @@ class Fan(SequentialTaskSet):
 
 
 class Initialized(SequentialTaskSet):
-
+ #se necesita 1 elem mas para que sea parejo 
     def on_start(self):
-        if len(value) != 0:
+        if value != []:
             self.ran = random.choice(value)
             value2.append(self.ran)
             value.remove(self.ran)
+            print(f'vlue {value}')
 
     @task
     def enable(self):
         # for i in range(1, 5):
-        if len(value) != 0:
+        if value != []:
             self.client.post("/enableQueue", headers=headers,
                              json={'starId': self.ran})
 
