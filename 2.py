@@ -24,11 +24,11 @@ value2 = []
 class Fan(SequentialTaskSet):
     @task
     def addfan(self):
-
-        self.client.post('/addfan', headers=headers, json={
-            'starId': random.choice(value2),
-            'userId': random.randrange(999999999)
-        })
+        for i in range(1, 50):
+            self.client.post('/addfan', headers=headers, json={
+                'starId': random.choice(value2),
+                'userId': random.randrange(999999999)
+            })
         raise StopUser()
 
 
