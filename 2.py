@@ -21,6 +21,7 @@ headers = {
 
 value = [1, 2, 3, 4, 5]
 value2 = []
+value3 = listName()
 
 
 class Fan(SequentialTaskSet):
@@ -29,7 +30,7 @@ class Fan(SequentialTaskSet):
         for i in range(1, 50):
             self.client.post('/addfan', headers=headers, json={
                 'starId': random.choice(value2),
-                'userId': random.randrange(999999999)
+                'userId': random.choice(value3)
             })
         raise StopUser()
 
@@ -37,7 +38,7 @@ class Fan(SequentialTaskSet):
 class Initialized(SequentialTaskSet):
  # se necesita 1 elem mas para que sea parejo
     def on_start(self):
-        if len(value) >0:
+        if len(value) > 0:
             self.ran = random.choice(value)
             value2.append(self.ran)
             value.remove(self.ran)
@@ -46,14 +47,15 @@ class Initialized(SequentialTaskSet):
     @task
     def enable(self):
         # for i in range(1, 5):
-        if len(value) >0:
+        if len(value) > 0:
             self.client.post("/enableQueue", headers=headers,
                              json={'starId': self.ran})
 
+    wait_time = between(30, 50)
     tasks = [Fan]
 
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
-    wait_time = between(10, 15)
+    wait_time = between(30, 50)
     tasks = [Initialized]
