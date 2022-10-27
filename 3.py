@@ -1,7 +1,9 @@
+from multiprocessing.connection import wait
 import random
+import time
 from tracemalloc import start
 from locust import HttpUser, SequentialTaskSet, task, between
-
+from locust.exception import StopUser
 headers = {
     'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
     'accept': 'application/json, text/plain, */*',
@@ -31,23 +33,28 @@ headers = {
 
 
 class Initialized(SequentialTaskSet):
-    def on_start(self):
+    ''' def on_start(self):
 
         self.id = random.randrange(5)
         self.client.post("/enableQueue", headers=headers,
                          json={'starId': self.id})
-
+ '''
     @task
     def addfan(self):
-        self.client.post('/addfan', headers=headers, json={
-            'starId': self.id,
-            'userId': random.randrange(10)
-        })
+
+        for i in range(1, 50):
+            time.sleep(5)
+            self.client.post('/addfan', headers=headers, json={
+                'starId': random.randrange(1, 5),
+                'userId': random.randrange(10)
+            })
+
+        raise StopUser()
         # self.user.environment.runner.stop()
 
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
-    wait_time = between(1, 5)
+    wait_time = between(30, 50)
 
     tasks = [Initialized]

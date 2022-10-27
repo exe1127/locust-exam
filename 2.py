@@ -21,7 +21,7 @@ headers = {
 
 value = [1, 2, 3, 4, 5]
 value2 = []
-value3 = listName()
+name = listName()
 
 
 class Fan(SequentialTaskSet):
@@ -30,7 +30,7 @@ class Fan(SequentialTaskSet):
         for i in range(1, 50):
             self.client.post('/addfan', headers=headers, json={
                 'starId': random.choice(value2),
-                'userId': random.choice(value3)
+                'userId': random.choice(name)
             })
         raise StopUser()
 
