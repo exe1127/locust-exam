@@ -28,7 +28,7 @@ name = listName()
 class Initialized(SequentialTaskSet):
     @task
     def addfan(self):
-        for i in range(1, 6):
+        for i in range(1, 100):
             self.client.post('/addfan', headers=headers, json={
                 'starId': '1',
                 'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
