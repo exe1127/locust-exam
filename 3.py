@@ -19,16 +19,13 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42',
 }
 
-value = [1, 2, 3, 4, 5]
-value2 = []
 name = listName()
-
 class Fan(SequentialTaskSet):
     @task
     def addfan(self):
-        for i in range(1, 80):
+        for i in range(1, 150):
             self.client.post('/addfan', headers=headers, json={
-                'starId': '2',
+                'starId': '3',
                 'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
             })
 
@@ -37,8 +34,6 @@ class Fan(SequentialTaskSet):
 
 
 class Initialized(SequentialTaskSet):
-
-
     tasks = [Fan]
 
 
