@@ -1,5 +1,5 @@
 import random
-from listname.openCSV import listName
+from listName.openCSV import listName
 from locust import HttpLocust, HttpUser, SequentialTaskSet, TaskSet, task, between
 from locust.exception import StopUser
 import time
@@ -29,7 +29,7 @@ class Initialized(TaskSet):
     @task
     def addfan(self):
         for i in range(1, 4):
-           self.client.post('/addfan', headers=headers, json={
+            self.client.post('/addfan', headers=headers, json={
                 'starId': '1',
                 'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
             })
@@ -41,8 +41,7 @@ class Initialized(TaskSet):
     #             'starId': '2',
     #             'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
     #         })
-    
-    
+
     # @task
     # def addfan3(self):
     #     for i in range(1, 80):
@@ -50,6 +49,7 @@ class Initialized(TaskSet):
     #             'starId': '3',
     #             'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
     #         })
+
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"

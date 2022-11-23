@@ -1,8 +1,5 @@
-import random
-from locust import HttpLocust, HttpUser, SequentialTaskSet, TaskSet, task, between
-from locust.exception import StopUser
-import time
-from openCSV import listName
+from locust import HttpUser, SequentialTaskSet, task, between
+
 headers = {
     'authority': 'btntbw73c9.execute-api.us-east-1.amazonaws.com',
     'accept': 'application/json, text/plain, */*',
@@ -19,26 +16,18 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42',
 }
 
-name = listName()
-
-class Fan(SequentialTaskSet):
-    @task
-    def addfan(self):
-        for i in range(1, 150):
-            self.client.post('/addfan', headers=headers, json={
-                'starId': '2',
-                'userId': random.choice(name)+' ' + str(time.time_ns() // 1000000)
-            })
-
-        raise StopUser()
-
 
 class Initialized(SequentialTaskSet):
 
-    tasks = [Fan]
+    @task
+    def enable(self):
+        for id in range(1, 101):
+            self.client.post("/enableQueue", headers=headers, json={'starId': id})
+                             
+        self.user.environment.runner.stop()
 
 
 class Request(HttpUser):
     host = "https://btntbw73c9.execute-api.us-east-1.amazonaws.com/develop"
-    # wait_time = between(1, 5)
+    wait_time = between(1, 5)
     tasks = [Initialized]

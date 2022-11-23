@@ -1,8 +1,8 @@
 import csv
-
+import os
 
 def listName():
-    f = open("name.csv")
+    f = open(r"C:\Users\Exe\Documents\GitLab\locust-exam\listName\name.csv")
     reader = csv.reader(f)
     estruct = []
     for row in reader:
