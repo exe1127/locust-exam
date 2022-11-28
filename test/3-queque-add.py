@@ -1,5 +1,5 @@
 import random
-from listname.openCSV import listName
+from listName.openCSV import listName
 from locust import HttpLocust, HttpUser, SequentialTaskSet, TaskSet, task, between
 from locust.exception import StopUser
 import time
